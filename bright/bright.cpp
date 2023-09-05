@@ -8,26 +8,20 @@
 std::string READ(std::string input) {
     // Tokenizer function here - no analysis for now
 
-    std::string copyin = input;
-
     // Sep string into tokens
-    Scanner scanner(copyin);
+    Scanner scanner(input);
     std::vector<Token> curr_tokens = scanner.scanTokens();
 
+    cout << "[ ";
+
     //Loop through current line, seperating along whitespace
-    std::stringstream ss(input);
-    std::string rawToken;
-    std::vector<std::string> tokens;
-
-    int i = 0;
-    std::cout << "tokens: ( ";
-
-    while (ss >> rawToken){ //FIX ME: Iterate over curr_tokens and finsh + test scanner
-        tokens.push_back(rawToken);
-        std::cout << tokens.at(i) << ", ";
-        i++;
+    for (auto it : curr_tokens) {
+  
+        // Print the values
+       if( it.type != BEOF) cout <<  it.lexeme << " ";
     }
-    std::cout << " )" << std::endl;
+
+    cout << "]" << endl;
 
     return input; 
 }
@@ -40,12 +34,12 @@ std::string PRINT(std::string input) {return input; }
 std::string rep(std::string input){
     auto ast = READ(input);
     auto result = EVAL(ast);
-    return PRINT(result); //FIXME - currently printing input in cout in main
+    return PRINT("Rep->PrintFun"); //FIXME - currently printing input in cout in main
 }
 
 //run file function
 // add functionality to main to check args for a file
-// eval and print for interactive only? 
+// eval and print for interactive only? 2
 
 //add in error functionality?
 int main(){

@@ -66,8 +66,7 @@ private:
     }
 
     void addToken(TokenType type, auto literal) {
-        string text = source.substr(start, current);
-        cout<<" ADDTOKEN "<<text<<"Num: "<<literal<<endl;
+        string text = source.substr(start, ( current - start));
 
         Token curr(type, text, literal, line);
         tokens.push_back(curr );
@@ -84,11 +83,12 @@ private:
             return;
         }
 
-        // The closing ".
+        // The closing ". so current+1
         advance();
 
         // Trim the surrounding quotes.
-        string value = source.substr(start + 1, current - 1);
+        string value = source.substr(start + 1, (current - 1 ) - (start + 1));
+
         addToken(STRING, value);
     }
 
@@ -103,26 +103,21 @@ private:
             while (isdigit(peek())) advance();
         }
 
-        addToken(NUMBER, stod(source.substr(start, current)));
+        addToken(NUMBER, stod(source.substr(start, ( current - start)))); //FIX ME?
     }
 
     void identifier(){
         while (isalpha(peek()) || isdigit(peek())) advance();
 
-        string text = source.substr(start, current);
-        // cout<<" In Identifier "<<text<<endl;
+        string text = source.substr(start, ( current - start));
 
-        TokenType type;// = keywords.at(text);
+        TokenType type;
 
         if (keywords.find(text) == keywords.end()) {
             type = IDENTIFIER;
-            // cout<<" In Identifier- NO KEY "<<endl;
-
         }
         else{
             type = keywords.at(text);
-            cout<<" In Identifier- BIG KEY "<<endl;
-
         }
 
         addToken(type);
@@ -137,6 +132,7 @@ public:
 
         while (!isAtEnd()) {
             start = current;
+            // cout<<endl<<"Before Scan: Start= "<< start << " Curr= " << current<< endl;
             scanToken();
         }
 
@@ -150,7 +146,6 @@ public:
         
 
         char c = advance(); //next char type function 
-        cout<<" Inside scanToken- Advance char: "<< c << endl;
 
         switch (c) {
             case '(': addToken(LEFT_PAREN); break;
@@ -188,13 +183,9 @@ public:
             case '"': tstring(); break;
             default:
                 if (isdigit(c)) {
-                    cout<<" Inside scanTokens- NUMBER: "<<endl;
-
                     number();
                 }
                 else if(isalpha(c)){
-                    cout<<" Inside scanTokens- Identifier: "<<endl;
-
                     identifier();
                 }
                 else {
