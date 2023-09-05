@@ -7,13 +7,14 @@
 //class for tokens instead of global vector issue
 std::string READ(std::string input) {
     // Tokenizer function here - no analysis for now
-    // string stream for strings in input cout input
 
     std::string copyin = input;
 
+    // Sep string into tokens
     Scanner scanner(copyin);
     std::vector<Token> curr_tokens = scanner.scanTokens();
 
+    //Loop through current line, seperating along whitespace
     std::stringstream ss(input);
     std::string rawToken;
     std::vector<std::string> tokens;
@@ -21,14 +22,12 @@ std::string READ(std::string input) {
     int i = 0;
     std::cout << "tokens: ( ";
 
-    while (ss >> rawToken){
+    while (ss >> rawToken){ //FIX ME: Iterate over curr_tokens and finsh + test scanner
         tokens.push_back(rawToken);
         std::cout << tokens.at(i) << ", ";
         i++;
     }
     std::cout << " )" << std::endl;
-
-    
 
     return input; 
 }
@@ -41,7 +40,7 @@ std::string PRINT(std::string input) {return input; }
 std::string rep(std::string input){
     auto ast = READ(input);
     auto result = EVAL(ast);
-    return PRINT(result);
+    return PRINT(result); //FIXME - currently printing input in cout in main
 }
 
 //run file function

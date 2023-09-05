@@ -67,7 +67,7 @@ private:
 
     void addToken(TokenType type, auto literal) {
         string text = source.substr(start, current);
-        cout<<" ADDTOKEN "<<text<<endl;
+        cout<<" ADDTOKEN "<<text<<"Num: "<<literal<<endl;
 
         Token curr(type, text, literal, line);
         tokens.push_back(curr );
@@ -110,17 +110,19 @@ private:
         while (isalpha(peek()) || isdigit(peek())) advance();
 
         string text = source.substr(start, current);
-        cout<<" In Identifier "<<text<<endl;
+        // cout<<" In Identifier "<<text<<endl;
 
         TokenType type;// = keywords.at(text);
 
         if (keywords.find(text) == keywords.end()) {
             type = IDENTIFIER;
-            cout<<" In Identifier- NO KEY "<<endl;
+            // cout<<" In Identifier- NO KEY "<<endl;
 
         }
         else{
             type = keywords.at(text);
+            cout<<" In Identifier- BIG KEY "<<endl;
+
         }
 
         addToken(type);
@@ -129,17 +131,15 @@ private:
 public:
     Scanner(string source) {
         this->source = source;
-        // cout<<" Scanner: "<< source<<endl;
     }
 
     vector<Token> scanTokens(){
-        cout<<" Inside scanTokens: "<<endl;
 
         while (!isAtEnd()) {
             start = current;
             scanToken();
         }
-        //move token here
+
         Token curr(BEOF, "", NULL, line);
         tokens.push_back( curr);
 
@@ -188,10 +188,12 @@ public:
             case '"': tstring(); break;
             default:
                 if (isdigit(c)) {
+                    cout<<" Inside scanTokens- NUMBER: "<<endl;
+
                     number();
                 }
                 else if(isalpha(c)){
-                cout<<" Inside scanTokens- Identifier: "<<endl;
+                    cout<<" Inside scanTokens- Identifier: "<<endl;
 
                     identifier();
                 }
