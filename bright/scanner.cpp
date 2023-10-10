@@ -13,6 +13,7 @@ private:
     string source;
     vector<Token> tokens;
 
+//FIX ME? handle capitlization by lowercase comp?
     unordered_map<string, TokenType> keywords ={
         {"and", AND},
         {"false" ,  FALSE},
@@ -39,10 +40,14 @@ private:
         return current >= source.length();
     }
     
+    // returns next element and increments the current element index
+    // consumes a char
     char advance(){
         return source.at(current++);
     }
 
+    // used to check "next" element is apart of one conceptual thing with the
+    // prev element, e.g., >= or !=
     bool match(char expected) {
         if (isAtEnd()) return false;
         if (source.at(current) != expected) return false;
@@ -51,20 +56,27 @@ private:
         return true;
     }
     
+    // returns next element but does NOT increment element
+    // doesnt consume char
     char peek() {
         if (isAtEnd()) return '\0';
         return source.at(current);
     }
 
+    // finish??
     char peekNext() {
         if (current + 1 >= source.length()) return '\0';
         return source.at(current + 1);
     } 
 
+    // wrapper that just takes in token type
+    // exists to overload function for parts of the grammar that are terminals
     void addToken(TokenType type){
         addToken(type, NULL);
     }
 
+    // uses private memebrs to initialize Token obj via constructor and add it to 
+    // scanner's Token vector
     void addToken(TokenType type, auto literal) {
         string text = source.substr(start, ( current - start));
 
@@ -72,6 +84,8 @@ private:
         tokens.push_back(curr );
     }
 
+    // handles string literals by consuming the quotes and saving the 
+    // enclosed string as a token
     void tstring() {
         while (peek() != '"' && !isAtEnd()) {
             if (peek() == '\n') line++;
@@ -92,6 +106,8 @@ private:
         addToken(STRING, value);
     }
 
+    // increments current index until the last digit in the number is consuemd
+    // adds the number (type casted basically) as a Token,to the scanners token vector
     void number() {
         while (isdigit(peek())) advance();
 
@@ -106,6 +122,14 @@ private:
         addToken(NUMBER, stod(source.substr(start, ( current - start)))); //FIX ME?
     }
 
+
+    /*
+    identifiers are some sort of variable (func, arg, etc)
+    handles case where we've made sure its not apart of the grammar
+    and it's not a number or string literal, if it is found in the keyword
+    use that type as it's part of the grammar, otherwise its broadly just a var (IDENTIFIER)
+    add that token to the scanner's Token vector
+    */
     void identifier(){
         while (isalpha(peek()) || isdigit(peek())) advance();
 
@@ -124,10 +148,13 @@ private:
     }
 
 public:
+
+    // Constructor that initialzes object with user input (one line)
     Scanner(string source) {
         this->source = source;
     }
 
+    //Using "source" string intialized via constructor above
     vector<Token> scanTokens(){
 
         while (!isAtEnd()) {
@@ -142,10 +169,18 @@ public:
         return tokens;
     }
 
-    void scanToken(){
-        
 
-        char c = advance(); //next char type function 
+/*
+Given string (source), go character by character checking for parts of grammar,
+variables, keywords, numbers, or strings to seperate by individual tokens in a 
+vector (which helper functions handle). This vector represents alphabetical lexemes or 
+smallest parts that the grammar can then interpret and use to build correct sentences.
+Thus, the vector that results from this func must be passded through generators based
+on the grammar for the language
+*/
+    void scanToken(){
+
+        char c = advance(); // returns and consumes prev char
 
         switch (c) {
             case '(': addToken(LEFT_PAREN); break;
@@ -195,5 +230,4 @@ public:
         }
     }
 
-  
 };

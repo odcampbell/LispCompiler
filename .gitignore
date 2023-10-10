@@ -1,0 +1,4 @@
+# Ignore .o files from make
+*.o
+# Ignore Play?
+*.exe
