@@ -1,11 +1,7 @@
-CXXFLAGS ?= -g -Wall -Wextra -Werror
+CXXFLAGS ?= -std=c++17 -g -Wall -Wextra -Werror
 
-bright: bright.cpp token.o scanner.o 
-	$(CXX) $(CXXFLAGS) bright.cpp token.o scanner.o -o run_bright
-
-scanner.o: scanner.cpp tokenType.hpp
-
-token.o: token.cpp tokenType.hpp
+bright: bright.cpp
+	$(CXX) $(CXXFLAGS) bright.cpp -o run_bright
 
 clean:
 	rm *.o *.exe

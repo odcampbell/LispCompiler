@@ -2,16 +2,19 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
-#include "scanner.cpp"
+#include "scanner.hpp"
 
 //class for tokens instead of global vector issue
 std::string READ(std::string input) {
-    // Tokenizer function here - no analysis for now
-
-    // Sep string into tokens
+    // Tokenizer function here - no analysis for now // next gets next string
+    // scan tokens already puts it into vector 
+    // Sep string into tokens put into vector
     Scanner scanner(input);
     std::vector<Token> curr_tokens = scanner.scanTokens();
-
+    
+    // Start creating lists with our grammar from the tokens
+    // Reader reader(tokens);
+//  return read_form(reader); //which returns read form..
     cout << "[ ";
 
     //Loop through current line, seperating along whitespace

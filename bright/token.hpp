@@ -1,3 +1,4 @@
+#pragma once
 #include "tokenType.hpp"
 #include <string>
 #include <iostream>

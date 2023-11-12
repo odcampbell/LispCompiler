@@ -1,19 +1,22 @@
-#include <string>
-#include <sstream>
+#pragma once
+// #include <string>
+#include <optional>
 #include <vector>
 #include <unordered_map>
-#include "token.cpp"
+#include "token.hpp"
 #include "tokenType.hpp"
 
 
 using namespace std;
 
+// Class used to handle lexical analysis, cutt a given line of code into 
+// lexemes that are apart of the alphabet of this language
 class Scanner {
 private:
     string source;
     vector<Token> tokens;
 
-//FIX ME? handle capitlization by lowercase comp?
+    //FIX ME? handle capitlization by lowercase comp?
     unordered_map<string, TokenType> keywords ={
         {"and", AND},
         {"false" ,  FALSE},
@@ -170,14 +173,14 @@ public:
     }
 
 
-/*
-Given string (source), go character by character checking for parts of grammar,
-variables, keywords, numbers, or strings to seperate by individual tokens in a 
-vector (which helper functions handle). This vector represents alphabetical lexemes or 
-smallest parts that the grammar can then interpret and use to build correct sentences.
-Thus, the vector that results from this func must be passded through generators based
-on the grammar for the language
-*/
+    /*
+    Given string (source), go character by character checking for parts of grammar,
+    variables, keywords, numbers, or strings to seperate by individual tokens in a 
+    vector (which helper functions handle). This vector represents alphabetical lexemes or 
+    smallest parts that the grammar can then interpret and use to build correct sentences.
+    Thus, the vector that results from this func must be passded through generators based
+    on the grammar for the language
+    */
     void scanToken(){
 
         char c = advance(); // returns and consumes prev char
@@ -231,3 +234,45 @@ on the grammar for the language
     }
 
 };
+
+// Class stores tokens and positions, used to do some generative grammar work
+class Reader {
+    public:
+
+    // Constructor to initialize class obj with token vector <single elements>
+    Reader(vector<Token> &tokens)
+        : readerTokens {tokens} {}
+    
+    // returns token at current pos and increments
+     optional<Token> next(){
+
+        if(readerIndex < readerTokens.size()){
+            return readerTokens.at(readerIndex++); //entire token needed or lexeme?
+        }
+        return {};
+    }
+
+    // just returns token at current pos
+    optional<Token> peek(){
+        if(readerIndex < readerTokens.size()){
+            return readerTokens.at(readerIndex);
+        }
+        return{};
+    }
+
+    private:
+        vector<Token> &readerTokens;
+        size_t readerIndex = 0;
+
+};
+
+
+//read_str takes the line input, scans into lexemes, and initializes the reader obj
+//with a token vector, then calls read form
+// on the tokens vector just pass around the reference 
+
+optional<string> read_form(Reader &reader);
+
+
+//read form takes in the reader object, uses peak which returns the token (just fine)
+// switch on the lexeme
