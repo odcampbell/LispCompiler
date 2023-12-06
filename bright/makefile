@@ -1,7 +1,7 @@
 CXXFLAGS ?= -std=c++17 -g -Wall -Wextra -Werror
 
-bright: bright.cpp
-	$(CXX) $(CXXFLAGS) bright.cpp -o run_bright
+bright: bright.cpp scanner.cpp printer.cpp types.cpp
+	$(CXX) $(CXXFLAGS)  -o $@ $^
 
 clean:
 	rm *.o *.exe

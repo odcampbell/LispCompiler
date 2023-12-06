@@ -4,6 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include "token.hpp"
+#include "types.hpp"
 #include "tokenType.hpp"
 
 
@@ -83,7 +84,7 @@ private:
     void addToken(TokenType type, auto literal) {
         string text = source.substr(start, ( current - start));
 
-        Token curr(type, text, literal, line);
+        Token curr (type, text, literal, line);
         tokens.push_back(curr );
     }
 
@@ -241,10 +242,10 @@ class Reader {
 
     // Constructor to initialize class obj with token vector <single elements>
     Reader(vector<Token> &tokens)
-        : readerTokens {tokens} {}
+        : readerTokens { tokens } { }
     
     // returns token at current pos and increments
-     optional<Token> next(){
+    optional<Token> next(){
 
         if(readerIndex < readerTokens.size()){
             return readerTokens.at(readerIndex++); //entire token needed or lexeme?
@@ -262,7 +263,7 @@ class Reader {
 
     private:
         vector<Token> &readerTokens;
-        size_t readerIndex = 0;
+        size_t readerIndex { 0 };
 
 };
 
@@ -271,8 +272,11 @@ class Reader {
 //with a token vector, then calls read form
 // on the tokens vector just pass around the reference 
 
-optional<string> read_form(Reader &reader);
+Value *read_form(Reader &reader);
 
+ListValue *read_list(Reader &reader); //return value? enum?
+
+Value *read_atom(Reader &reader); //return value? enum?
 
 //read form takes in the reader object, uses peak which returns the token (just fine)
 // switch on the lexeme

@@ -3,41 +3,40 @@
 #include <sstream>
 #include <vector>
 #include "scanner.hpp"
+#include "printer.hpp"
 
-//class for tokens instead of global vector issue
-std::string READ(std::string input) {
-    // Tokenizer function here - no analysis for now // next gets next string
-    // scan tokens already puts it into vector 
+Value *READ (std::string input) {
+
     // Sep string into tokens put into vector
     Scanner scanner(input);
     std::vector<Token> curr_tokens = scanner.scanTokens();
     
-    // Start creating lists with our grammar from the tokens
-    // Reader reader(tokens);
-//  return read_form(reader); //which returns read form..
-    cout << "[ ";
+    // Start creating lists/symbols from the tokens
+    Reader reader(curr_tokens);
+    return read_form(reader); //which returns read form..
+    // cout << "[ ";
 
-    //Loop through current line, seperating along whitespace
-    for (auto it : curr_tokens) {
+    // //Loop through current line, seperating along whitespace
+    // for (auto it : curr_tokens) {
   
-        // Print the values
-       if( it.type != BEOF) cout <<  it.lexeme << " ";
-    }
+    //     // Print the values
+    //    if( it.type != BEOF) cout <<  it.lexeme << " ";
+    // }
 
-    cout << "]" << endl;
+    // cout << "]" << endl;
 
-    return input; 
+    // return input; 
 }
 
-std::string EVAL(std::string input) {return input; }
+Value *EVAL(Value *input) {return input;}
 
-std::string PRINT(std::string input) {return input; }
+std::string PRINT(Value *input) { return pr_str(input);}
 
 
 std::string rep(std::string input){
-    auto ast = READ(input);
+    auto ast = READ(input); //vector of vectors / strings
     auto result = EVAL(ast);
-    return PRINT("Rep->PrintFun"); //FIXME - currently printing input in cout in main
+    return PRINT(result); //FIXME - currently printing input in cout in main
 }
 
 //run file function
