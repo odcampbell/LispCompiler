@@ -59,9 +59,15 @@ Value  *read_int(Reader &reader){ //return value? enum? // change opt str?
   long num = 0;
   // cout<< "yup int"<<endl;
   for(char c : token.value().lexeme){
-    num *= 10;
-    int digit = c - 48;  
-    num += digit;
+    if(c == '-'){
+      num *= -1;
+    }
+    else{
+      num *= 10;
+      int digit = c - 48;  
+      num += digit;
+    }
+    
   }
       
   return new IntValue { num };

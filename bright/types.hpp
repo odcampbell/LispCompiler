@@ -50,6 +50,19 @@ class ListValue : public Value{
     std::vector<Value *> m_list {};
 };
 
+
+struct HashMapHash{
+    std::size_t operator()(Value *key) const noexcept {
+        return std::hash<std::string> {}(key->inspect());
+    }
+};
+
+struct HashMapPred{
+     bool operator()(Value *lhs, Value *rhs) const{
+        return lhs->inspect() == rhs->inspect(); //FIX ME
+    }
+};
+
 class SymbolValue : public Value{
     public:
     SymbolValue(std::string str)  //tokens instead of lexemes?
