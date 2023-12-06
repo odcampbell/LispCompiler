@@ -40,7 +40,7 @@ private:
     unsigned int current = 0;
     int line = 1;
 
-   bool isAtEnd(){
+    bool isAtEnd(){
         return current >= source.length();
     }
     
