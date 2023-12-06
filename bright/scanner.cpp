@@ -10,17 +10,18 @@ Value *read_form(Reader &reader){ //garbage collection?
     switch(token.value().lexeme.at(0)){ //value() grabs val from optional
       case '(':
         return read_list(reader);
-    //   case '[':
-      //     return read_vector(reader);
-      //   case '{':
-      //     return read_hash_map(reader);
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+        return read_int(reader);
       //   case '\'':
-      //   case '`':
-      //   case '~':
-      //   case '@':
-      //     return read_quoted_value(reader);
-      //   case '^':
-    //     return read_with_meta(reader);
       default:
         return read_atom(reader);
     }
@@ -50,4 +51,18 @@ ListValue  *read_list(Reader &reader){ //return value? enum? // change opt str?
 
 Value *read_atom(Reader &reader){
   return new SymbolValue { reader.next().value().lexeme }; //do I want token or string here?
+}
+
+Value  *read_int(Reader &reader){ //return value? enum? // change opt str?
+  auto token = reader.next(); // consume '(' // should equal something?
+
+  long num = 0;
+  // cout<< "yup int"<<endl;
+  for(char c : token.value().lexeme){
+    num *= 10;
+    int digit = c - 48;  
+    num += digit;
+  }
+      
+  return new IntValue { num };
 }

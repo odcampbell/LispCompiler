@@ -278,5 +278,7 @@ ListValue *read_list(Reader &reader); //return value? enum?
 
 Value *read_atom(Reader &reader); //return value? enum?
 
+Value *read_int(Reader &reader); //return value? enum?
+
 //read form takes in the reader object, uses peak which returns the token (just fine)
 // switch on the lexeme
