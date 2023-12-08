@@ -16,7 +16,7 @@ Value *READ (std::string input) {
     Scanner scanner(input);
     std::vector<Token> curr_tokens = scanner.scanTokens();
     
-    // Start creating lists/symbols from the tokens
+    // Start creating meaningful lists/list of lists/symbols from the tokens
     Reader reader(curr_tokens);
     return read_form(reader); //which returns read form..
     // cout << "[ ";
@@ -32,49 +32,55 @@ Value *READ (std::string input) {
 
     // return input; 
 }
+
 Value *eval_ast(Value *ast, Env &env);
 
-Value *EVAL(Value *ast, Env &env) {
+Value *EVAL(Value *ast, Env &env) { //eg (+ 2 3)
 
-    if(ast->type() != Value::Type::List){
+    if(ast->type() != Value::Type::List){ // + 2 3
         return eval_ast(ast, env);
     }
     else if(ast->as_list()->is_empty()){
         return ast;
     }
     else{
-        auto list = eval_ast(ast,env)->as_list();
-        auto fn = list->at(0)->as_fn()->to_fn();
+        auto list = eval_ast(ast,env)->as_list(); // add fun, 2, 3
+        auto fn = list->at(0)->as_fn()->to_fn();//issues here
 
-        Value *args[list->size()-1];
+        Value *args[list->size()-1]; // make array w/0 function spot
         for (size_t i =1; i< list->size(); ++i){
             args[i-1] = list->at(i);
         }
         return fn(list->size() - 1,args);
     }
-
-    // return input;
 }
 
-Value *eval_ast(Value *ast, Env &env){
+// takes in ast and env, switches on type of env
+//returns symbols or lists of symbol values for each 
+// internal list and its respective symobl
+Value *eval_ast(Value *ast, Env &env){ 
     switch (ast->type()){
-        case Value::Type::Symbol: {
+        case Value::Type::Symbol: { //diff from int, has own type
             auto search = env.find(ast->as_symbol());
+            std::cout<< "symbol: " << ast->inspect() << endl;
             if (search == env.end()){
                 std::cerr <<"error, "<< ast->as_symbol()->str() << " not found\n";
                 return new SymbolValue { "nil"};
             }
-            return search->second;
+            return search->second; // believe tthis returns functions defiend in env for symbols
         }
         case Value::Type::List:{
+            std::cout<< "list: " << ast->inspect() << endl;
             auto result = new ListValue {};
             for( auto val : *ast->as_list()){
-                result->push(EVAL(val, env));
+                std::cout<< "val: " << val->inspect() << endl;
+
+                result->push(EVAL(val, env)); //push a bunch of symbol values to list val
             }
-            return result;
+            return result; // add func, 2, 3
         }
         default:
-            return ast;
+            return ast; // ints
     }
 }
 
@@ -91,6 +97,7 @@ std::string rep(std::string input, Env &env){
 // eval and print for interactive only? 2
 
 //add in error functionality?
+//FIXME: only recognizing these functions, why is it erroring tho?
 
 Value *add(size_t argc, Value**args){
     assert(argc == 2);

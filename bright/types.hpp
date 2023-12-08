@@ -88,7 +88,7 @@ class IntValue : public Value {
     long to_long(){ return m_long; }
 
     virtual std::string inspect() { 
-        return std::to_string(m_long);
+        return std::to_string(m_long); //may be able to use these for car/cdr/cons functions
     } //for printing
 
     virtual Type type() { return Type::Integer;}
@@ -106,7 +106,7 @@ class FnValue : public Value{
     FnPtr to_fn() { return m_fn;}
 
     virtual std::string inspect() { 
-        return "placeholder";
+        return "<fn placeholder>";
     } //for printing
 
     virtual Type type() { return Type::Fn;}

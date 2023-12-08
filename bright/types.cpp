@@ -1,5 +1,5 @@
 #include "types.hpp"
-
+//used for static type casting
 ListValue *Value::as_list(){
     assert(type() == Type::List);
     return static_cast<ListValue*>(this);

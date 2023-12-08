@@ -225,6 +225,8 @@ public:
                     number();
                 }
                 else if(isalpha(c)){
+                    // cout << "Alphas:(!@#$%^&) cause issues here"<< line << endl;
+
                     identifier();
                 }
                 else {

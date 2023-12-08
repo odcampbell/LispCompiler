@@ -1,7 +1,7 @@
 #include "scanner.hpp"
 
 Value *read_form(Reader &reader){ //garbage collection?
-    auto token = reader.peek(); //returns current token
+    auto token = reader.peek(); //returns current token wait no it doesnt..
 
     if(!token){
       return NULL;
@@ -10,6 +10,8 @@ Value *read_form(Reader &reader){ //garbage collection?
     switch(token.value().lexeme.at(0)){ //value() grabs val from optional
       case '(':
         return read_list(reader);
+      // case '-':
+        //check isdigit peek, then pass in boolean flag
       case '0':
       case '1':
       case '2':
