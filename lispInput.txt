@@ -1,2 +1,14 @@
-( define foo arg1 arg2 ( body ) )
-(define foo arg1 arg2 (body))
+(def mynun 111)
+111
+
+(def MYNUN 222)
+222
+
+(def y (+ 1 7)) 
+#8
+
+(let (z (+ 2 3)) (+1 z)) 
+#6
+
+(let (p (+ 2 3) q (+ 2 p)) (+ p q)) 
+#12

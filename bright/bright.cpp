@@ -5,10 +5,7 @@
 #include <unordered_map>
 #include "scanner.hpp"
 #include "printer.hpp"
-
-
-using Env = std::unordered_map<SymbolValue *, Value *, HashMapHash, HashMapPred >;
-
+#include "env.hpp"
 
 Value *READ (std::string input) {
 
@@ -19,50 +16,59 @@ Value *READ (std::string input) {
     // Start creating meaningful lists/list of lists/symbols from the tokens
     Reader reader(curr_tokens);
     return read_form(reader); //which returns read form..
-    // cout << "[ ";
-
-    // //Loop through current line, seperating along whitespace
-    // for (auto it : curr_tokens) {
-  
-    //     // Print the values
-    //    if( it.type != BEOF) cout <<  it.lexeme << " ";
-    // }
-
-    // cout << "]" << endl;
-
-    // return input; 
 }
 
 Value *eval_ast(Value *ast, Env &env);
 
 Value *EVAL(Value *ast, Env &env) { //eg (+ 2 3)
-    Value vals();
     if(ast->type() != Value::Type::List){ // + 2 3
         return eval_ast(ast, env);
     }
     else if(ast->as_list()->is_empty()){
         return ast;
     }
-    else{
-        auto list = eval_ast(ast,env)->as_list(); // add fun, 2, 3
-        try {
-            
-            if(list->at(0)->type() != Value::Type::Fn){//issues here
-                throw new ExceptionValue{list->inspect() + " doesnt start with function"};
-            }
-            else{
-                auto fn = list->at(0)->as_fn()->to_fn();
-                Value *args[list->size()-1]; // make array w/0 function spot
-                for (size_t i =1; i< list->size(); ++i){
-                    args[i-1] = list->at(i);
-                }
-                return fn(list->size() - 1,args);
-            }
+    else{//looks like lists are always evaluated..
 
-        }catch(ExceptionValue* exception){
-            std::cerr << exception->message() << std::endl;
+    //Ensure function is being called or something else? e.g., try sumn else first?
+        auto list = ast->as_list();
+        auto first = list->at(0);
+        if(first->is_symbol() && first->as_symbol()->matches("def")){
+            auto key = list->at(1)->as_symbol();
+            auto val = EVAL(list->at(2),env);
+            env.set(key,val);
+            return val;
         }
-    }return ast;
+        else if(first->is_symbol() && first->as_symbol()->matches("let")){ //exception, (let (a 9 b 10) a) = 9
+            auto new_env = new Env {&env};
+            auto bindings = list->at(1)->as_list();
+            for(size_t i = 0; i <bindings->size(); i+=2){
+                auto key = bindings->at(i)->as_symbol();
+                assert(i+1 < bindings->size());
+                auto val = EVAL(bindings->at(i+1), *new_env);
+                new_env->set(key,val);
+            }
+            return EVAL(list->at(2), *new_env);
+        }
+        else{
+            try{
+                auto list = eval_ast(ast,env)->as_list(); // add fun, 2, 3
+                if(list->at(0)->type() != Value::Type::Fn){
+                    throw new ExceptionValue{list->inspect() + " doesnt start with function"};
+                }
+                else{ ////////old
+                    
+                    auto fn = list->at(0)->as_fn()->to_fn();
+                    Value *args[list->size()-1]; // make array w/0 function spot
+                    for (size_t i =1; i< list->size(); ++i){
+                        args[i-1] = list->at(i);
+                    }
+                    return fn(list->size() - 1,args);
+                }
+            }catch(ExceptionValue* exception){
+                std::cerr << exception->message() << std::endl;
+            }return ast;
+        }
+    }
 }
 
 // takes in ast and env, switches on type of env
@@ -71,20 +77,13 @@ Value *EVAL(Value *ast, Env &env) { //eg (+ 2 3)
 Value *eval_ast(Value *ast, Env &env){ 
     switch (ast->type()){
         case Value::Type::Symbol: { //diff from int, has own type
-            auto search = env.find(ast->as_symbol());
-            std::cout<< "symbol: " << ast->inspect() << endl;
-            if (search == env.end()){
-                throw new ExceptionValue{ast->as_symbol()->str() + " not found"};
-                // std::cerr <<"error, "<< ast->as_symbol()->str() << " not found\n";
-                // return new SymbolValue { "nil"};
-            }
-            return search->second; // believe tthis returns functions defiend in env for symbols
+            return env.get(ast->as_symbol());
         }
         case Value::Type::List:{
-            std::cout<< "list: " << ast->inspect() << endl;
+            // std::cout<< "list: " << ast->inspect() << endl;
             auto result = new ListValue {};
             for( auto val : *ast->as_list()){
-                std::cout<< "val: " << val->inspect() << endl;
+                // std::cout<< "val: " << val->inspect() << endl;
 
                 result->push(EVAL(val, env)); //push a bunch of symbol values to list val
             }
@@ -165,11 +164,11 @@ Value *div(size_t argc, Value**args){
 
 int main(){
 
-    Env env {};
-    env[new SymbolValue("+")] = new FnValue {add};
-    env[new SymbolValue("-")] = new FnValue {sub};
-    env[new SymbolValue("*")] = new FnValue {mul};
-    env[new SymbolValue("/")] = new FnValue {div};
+    auto env = new Env {nullptr}; //top level
+    env->set(new SymbolValue("+"), new FnValue {add});
+    env->set(new SymbolValue("-"), new FnValue {sub});
+    env->set(new SymbolValue("*"), new FnValue {mul});
+    env->set(new SymbolValue("/"), new FnValue {div});
 
     std::string input;
 
@@ -180,7 +179,7 @@ int main(){
             break;
         }
            
-        std::cout << rep(input, env) << std::endl;
+        std::cout << rep(input, *env) << std::endl;
     }  
     return 0;
 }

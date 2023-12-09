@@ -26,7 +26,8 @@ private:
         {"or" ,     OR},
         {"return" , RETURN},
         {"true" ,   TRUE},
-        {"define" ,    DEFINE},
+        {"def" ,    DEFINE},
+        {"let" ,    LET},
         {"SET" ,  SET},
         {"cons" ,     CONS},
         {"cond" ,    COND},
@@ -134,7 +135,7 @@ private:
     use that type as it's part of the grammar, otherwise its broadly just a var (IDENTIFIER)
     add that token to the scanner's Token vector
     */
-    void identifier(){
+    void identifier(){//update here for def! let* nil?
         while (isalpha(peek()) || isdigit(peek())) advance();
 
         string text = source.substr(start, ( current - start));

@@ -21,8 +21,9 @@ class Value {
         Exception,
     };
 
-    virtual std::string inspect() { assert(0);}
-    virtual Type type() { assert(0);}
+    virtual std::string inspect() = 0;
+    virtual Type type() = 0;
+    virtual bool is_symbol() {return false;}
 
     ListValue* as_list();
     IntValue* as_int();
@@ -39,8 +40,8 @@ class ListValue : public Value{
         m_list.push_back(val);
     }
 
-    virtual std::string inspect();
-    virtual Type type() { return Type::List;}
+    virtual std::string inspect() override;
+    virtual Type type() override { return Type::List;}
 
     auto begin() {return m_list.begin();}
     auto end() {return m_list.end();}
@@ -73,9 +74,10 @@ class SymbolValue : public Value{
     
     std::string str() { return m_str;}
 
-    virtual std::string inspect() { return str();} //for printing
-    virtual Type type() { return Type::Symbol;}
-
+    virtual std::string inspect() override{ return str();} //for printing
+    virtual Type type() override { return Type::Symbol;}
+    bool matches(const char *str) const{ return m_str == str;}
+    virtual bool is_symbol() override {return true;}
 
     private:
     std::string m_str;
@@ -90,11 +92,11 @@ class IntValue : public Value {
 
     long to_long(){ return m_long; }
 
-    virtual std::string inspect() { 
+    virtual std::string inspect() override{ 
         return std::to_string(m_long); //may be able to use these for car/cdr/cons functions
     } //for printing
 
-    virtual Type type() { return Type::Integer;}
+    virtual Type type() override{ return Type::Integer;}
     //inspect
     
     private: 
@@ -108,11 +110,11 @@ class FnValue : public Value{
 
     FnPtr to_fn() { return m_fn;}
 
-    virtual std::string inspect() { 
+    virtual std::string inspect() override{ 
         return "<fn placeholder>";
     } //for printing
 
-    virtual Type type() { return Type::Fn;}
+    virtual Type type() override{ return Type::Fn;}
 
     private: 
     FnPtr m_fn {nullptr};
@@ -125,11 +127,11 @@ class ExceptionValue : public Value{
 
     const std::string &message() { return m_message;}
 
-    virtual std::string inspect() { 
+    virtual std::string inspect() override{ 
         return "<exception " + m_message + ">";
     } //for printing
 
-    virtual Type type() { return Type::Exception;}
+    virtual Type type() override { return Type::Exception;}
 
     private: 
     std::string m_message;
