@@ -6,6 +6,7 @@
 #include "scanner.hpp"
 #include "printer.hpp"
 #include "env.hpp"
+#include "core.hpp"
 
 Value *READ (std::string input) {
 
@@ -161,58 +162,15 @@ std::string rep(std::string input, Env &env){
 //add in error functionality?
 //FIXME: only recognizing these functions, why is it erroring tho?
 
-Value *add(size_t argc, Value**args){
-    assert(argc == 2);
-    auto a = args[0];
-    auto b = args[1];
-    assert(a->type() == Value::Type::Integer);
-    assert(b->type() == Value::Type::Integer);
-
-    long result = a->as_int()->to_long() + b->as_int()->to_long();
-    return new IntValue {result};
-}
-
-Value *sub(size_t argc, Value**args){
-    assert(argc == 2);
-    auto a = args[0];
-    auto b = args[1];
-    assert(a->type() == Value::Type::Integer);
-    assert(b->type() == Value::Type::Integer);
-
-    long result = a->as_int()->to_long() - b->as_int()->to_long();
-    return new IntValue {result};
-}
-
-Value *mul(size_t argc, Value**args){
-    assert(argc == 2);
-    auto a = args[0];
-    auto b = args[1];
-    assert(a->type() == Value::Type::Integer);
-    assert(b->type() == Value::Type::Integer);
-
-    long result = a->as_int()->to_long() * b->as_int()->to_long();
-    return new IntValue {result};
-}
-
-Value *div(size_t argc, Value**args){
-    assert(argc == 2);
-    auto a = args[0];
-    auto b = args[1];
-    assert(a->type() == Value::Type::Integer);
-    assert(b->type() == Value::Type::Integer);
-
-    long result = a->as_int()->to_long() / b->as_int()->to_long();
-    return new IntValue {result};
-}
-
 int main(){
 
     auto env = new Env {nullptr}; //top level
-    env->set(new SymbolValue("+"), new FnValue {add});
-    env->set(new SymbolValue("-"), new FnValue {sub});
-    env->set(new SymbolValue("*"), new FnValue {mul});
-    // env->set(new SymbolValue("/"), new FnValue {div});
+    auto ns = build_namespace();
 
+    for (auto pair : ns)
+        env->set(new SymbolValue(pair.first), new FnValue {pair.second});
+        //end for
+        
     std::string input;
 
     for(;;) { // infinite loop
