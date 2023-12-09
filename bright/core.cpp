@@ -17,6 +17,7 @@ std::unordered_map<std::string, Function> build_namespace(){
     ns["<="] = lte;
     ns[">"] = gt;
     ns[">="] = gte;
+    ns["not"] = not_fun;
     // ns["/"] = lte; car 
     // ns["/"] = lte; cdr
     // ns["/"] = lte; cons
@@ -167,6 +168,13 @@ Value *gte(size_t argc, Value**args){
     if( a->as_int()->to_long() >= b->as_int()->to_long())
         return new TrueValue;
     return new FalseValue;
+}
+
+Value *not_fun(size_t argc, Value**args){
+    assert(argc >=1);
+    if( args[0]->is_truthy())
+        return new FalseValue;
+    return new TrueValue;
 }
 
 // Value *car(size_t argc, Value**args){

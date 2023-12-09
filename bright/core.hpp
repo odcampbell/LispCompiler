@@ -24,3 +24,4 @@ Value *gte(size_t argc, Value**args);
 Value *car(size_t argc, Value**args);
 Value *cdr(size_t argc, Value**args);
 Value *cons(size_t argc, Value**args);
+Value *not_fun(size_t argc, Value**args);
