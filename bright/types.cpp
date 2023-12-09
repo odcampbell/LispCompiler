@@ -58,5 +58,21 @@ std::string ListValue::inspect() {
     return out; // string of form: (2 , 3 , 4 , 5 , 6 , 7 , 8)
 }
 
+bool ListValue::operator==(Value *other) const {
+    if(type() != other->type()){
+        return false;
+    }
 
+    auto other_list = other->as_list();
 
+    if(size() != other_list->size()){
+        return false;
+    }
+
+    for(size_t i=0; i<size(); ++i){
+        if(!(*at(i) == other_list->at(i))){ //other?
+            return false;
+        }
+    }
+    return true;
+}

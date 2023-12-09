@@ -29,9 +29,13 @@ class Value {
     };
 
     virtual std::string inspect() = 0;
-    virtual Type type() = 0;
+    virtual Type type() const = 0;
     virtual bool is_symbol() {return false;}
     virtual bool is_truthy() {return true;}
+    virtual bool is_list() {return false;}
+    virtual bool is_listy() {return false;}
+    virtual bool operator==( Value *) const {return false;}
+    // virtual bool is_listy() {return false;}
 
     ListValue* as_list();
     IntValue* as_int();
@@ -52,14 +56,17 @@ class ListValue : public Value{
     }
 
     virtual std::string inspect() override;
-    virtual Type type() override { return Type::List;}
+    virtual Type type() const override { return Type::List;}
+    bool is_list() override {return true;}
+    // virtual bool is_listy() {return true;}
+    virtual bool operator==(Value *) const override;
 
     auto begin() {return m_list.begin();}
     auto end() {return m_list.end();}
 
     bool is_empty() {return m_list.size() == 0;}
-    size_t size() { return m_list.size(); }
-    Value* at(size_t index) { return m_list.at(index); }
+    size_t size() const { return m_list.size(); }
+    Value* at(size_t index) const{ return m_list.at(index); }
 
     private:
     std::vector<Value *> m_list {};
@@ -86,7 +93,7 @@ class SymbolValue : public Value{
     std::string str() { return m_str;}
 
     virtual std::string inspect() override{ return str();} //for printing
-    virtual Type type() override { return Type::Symbol;}
+    virtual Type type() const override { return Type::Symbol;}
     bool matches(const char *str) const{ return m_str == str;}
     virtual bool is_symbol() override {return true;}
 
@@ -107,7 +114,7 @@ class IntValue : public Value {
         return std::to_string(m_long); //may be able to use these for car/cdr/cons functions
     } //for printing
 
-    virtual Type type() override{ return Type::Integer;}
+    virtual Type type() const override{ return Type::Integer;}
     //inspect
     
     private: 
@@ -125,7 +132,7 @@ class FnValue : public Value{
         return "<fn placeholder>";
     } //for printing
 
-    virtual Type type() override{ return Type::Fn;}
+    virtual Type type() const override{ return Type::Fn;}
 
     private: 
     Function m_fn {nullptr};
@@ -142,7 +149,7 @@ class ExceptionValue : public Value{
         return "<exception " + m_message + ">";
     } //for printing
 
-    virtual Type type() override { return Type::Exception;}
+    virtual Type type() const override { return Type::Exception;}
 
     private: 
     std::string m_message;
@@ -152,14 +159,14 @@ class TrueValue : public Value{
     public:
     
         virtual std::string inspect() override {return "true"; }
-        virtual Type type() override {return Type::True;}
+        virtual Type type() const override {return Type::True;}
 };
 
 class FalseValue : public Value{
     public:
     
         virtual std::string inspect() override {return "false"; }
-        virtual Type type() override {return Type::False;}
+        virtual Type type() const override {return Type::False;}
         virtual bool is_truthy() {return false;}
 
 };
@@ -168,7 +175,7 @@ class NilValue : public Value{
     public:
     
         virtual std::string inspect() override {return "nil"; }
-        virtual Type type() override {return Type::Nil;}
+        virtual Type type() const override {return Type::Nil;}
         virtual bool is_truthy() override {return false;}
 
 };
