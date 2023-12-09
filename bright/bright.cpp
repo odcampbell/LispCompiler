@@ -57,7 +57,7 @@ Value *EVAL(Value *ast, Env &env) { //eg (+ 2 3)
                 Value *result = nullptr;
                 assert(list->size() > 1);
                 for(size_t i=1; i < list->size(); ++i){
-                    result = eval_ast(list->at(i), env);//*env?
+                    result = EVAL(list->at(i), env);//*env?
                 }
                 return result;
             }
