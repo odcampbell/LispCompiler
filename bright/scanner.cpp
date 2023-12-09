@@ -10,8 +10,16 @@ Value *read_form(Reader &reader){ //garbage collection?
     switch(token.value().lexeme.at(0)){ //value() grabs val from optional
       case '(':
         return read_list(reader);
-      // case '-':
         //check isdigit peek, then pass in boolean flag
+      case '-':{
+        if(token.value().lexeme.length() == 1) 
+          return read_atom(reader);
+        else if ( isdigit(token.value().lexeme.at(1))){
+          return read_int(reader);
+        }else{
+          return read_atom(reader);
+        }
+      }
       case '0':
       case '1':
       case '2':
@@ -57,20 +65,22 @@ Value *read_atom(Reader &reader){
 
 Value  *read_int(Reader &reader){ //return value? enum? // change opt str?
   auto token = reader.next(); // consume '(' // should equal something?
-
   long num = 0;
+  bool neg = false;
   // cout<< "yup int"<<endl;
   for(char c : token.value().lexeme){
     if(c == '-'){
-      num *= -1;
+      neg = true;
     }
     else{
       num *= 10;
       int digit = c - 48;  
       num += digit;
     }
-    
-  }
+  } //end for
+
+  if(neg) 
+    num *= -1;
       
   return new IntValue { num };
 }

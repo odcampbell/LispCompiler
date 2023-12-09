@@ -193,7 +193,23 @@ public:
             case '}': addToken(RIGHT_BRACE); break;
             case ',': addToken(COMMA); break;
             case '.': addToken(DOT); break;
-            case '-': addToken(MINUS); break;
+            case '-': {
+                int curr = current;
+                if(source.at(curr) == ' '){
+                    // cout << "Next char must be space"<< endl;
+                    addToken(MINUS); 
+                }
+                else if(isdigit(source.at(curr))){
+                    // cout << "Next char must be digit. Curr:"<<curr<<" "<< source.at(curr)<< endl;
+                    advance(); //consume -
+                    number();
+                }
+                else{
+                    cout << "Unexpected character. Line:"<< line <<" Curr: "<< curr << endl;
+                }
+                    
+                break;
+                }
             case '+': addToken(PLUS); break;
             case ';': addToken(SEMICOLON); break;
             case '*': addToken(STAR); break; 
@@ -262,6 +278,23 @@ class Reader {
         }
         return{};
     }
+
+    // optional<Token> peekNext(){ //shows next without consuming
+
+    //     if(readerIndex < readerTokens.size()){
+    //         readerIndex++;
+    //         auto token = readerTokens.at(readerIndex);
+    //         readerIndex--;
+    //         return token; //entire token needed or lexeme?
+    //     }
+    //     return {};
+    // }
+
+    // bool is_number(const std::string& s){
+    //     string::const_iterator it = s.begin();
+    //     while (it != s.end() && isdigit(*it)) ++it;
+    //     return !s.empty() && it == s.end();
+    // }
 
     private:
         vector<Token> &readerTokens;
