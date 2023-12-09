@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <functional>
 #include <cassert>
 
 class ListValue;
@@ -30,6 +31,7 @@ class Value {
     virtual std::string inspect() = 0;
     virtual Type type() = 0;
     virtual bool is_symbol() {return false;}
+    virtual bool is_truthy() {return true;}
 
     ListValue* as_list();
     IntValue* as_int();
@@ -92,7 +94,7 @@ class SymbolValue : public Value{
     std::string m_str;
 };
 
-using FnPtr = Value*(*)(size_t, Value**);
+using Function = std::function<Value *(size_t, Value**)>;
 
 class IntValue : public Value {
     public:
@@ -114,10 +116,10 @@ class IntValue : public Value {
 
 class FnValue : public Value{
     public:
-    FnValue(FnPtr fn)
+    FnValue(Function fn)
         : m_fn { fn } {}
 
-    FnPtr to_fn() { return m_fn;}
+    Function to_fn() { return m_fn;}
 
     virtual std::string inspect() override{ 
         return "<fn placeholder>";
@@ -126,7 +128,7 @@ class FnValue : public Value{
     virtual Type type() override{ return Type::Fn;}
 
     private: 
-    FnPtr m_fn {nullptr};
+    Function m_fn {nullptr};
 };
 
 class ExceptionValue : public Value{
@@ -158,6 +160,8 @@ class FalseValue : public Value{
     
         virtual std::string inspect() override {return "false"; }
         virtual Type type() override {return Type::False;}
+        virtual bool is_truthy() {return false;}
+
 };
 
 class NilValue : public Value{
@@ -165,4 +169,6 @@ class NilValue : public Value{
     
         virtual std::string inspect() override {return "nil"; }
         virtual Type type() override {return Type::Nil;}
+        virtual bool is_truthy() override {return false;}
+
 };

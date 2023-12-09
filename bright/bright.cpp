@@ -52,6 +52,45 @@ Value *EVAL(Value *ast, Env &env) { //eg (+ 2 3)
                 }
                 return EVAL(list->at(2), *new_env);
             }
+            else if(special->matches("do")){
+                Value *result = nullptr;
+                assert(list->size() > 1);
+                for(size_t i=1; i < list->size(); ++i){
+                    result = eval_ast(list->at(i), env);//*env?
+                }
+                return result;
+            }
+            else if(special->matches("if")){
+                //(if c t f)
+                // if c t
+                auto condition = list->at(1);
+                auto true_expr = list->at(2);
+                auto false_expr = list->size() >= 4 ? list->at(3) : new NilValue{};
+
+                if(EVAL(condition, env)->is_truthy()){
+                    return EVAL(true_expr, env);
+                }
+                else{
+                    return EVAL(false_expr, env);
+                }
+            }
+            else if(special->matches("fn")){
+
+                auto env_ptr = &env;
+                auto binds = list->at(1)->as_list();
+                auto body = list->at(2);
+
+                auto closure = [env_ptr, binds, body](size_t argc, Value **args){
+                    
+                    auto exprs = new ListValue {};
+                    for ( size_t i=0; i <argc; ++i){
+                        exprs->push(args[i]);
+                    }
+                    auto fn_env = new Env { env_ptr, binds, exprs };
+                    return EVAL(body, *fn_env );
+                };
+                return new FnValue {closure};
+            }
         }
 
         try{
@@ -172,7 +211,7 @@ int main(){
     env->set(new SymbolValue("+"), new FnValue {add});
     env->set(new SymbolValue("-"), new FnValue {sub});
     env->set(new SymbolValue("*"), new FnValue {mul});
-    env->set(new SymbolValue("/"), new FnValue {div});
+    // env->set(new SymbolValue("/"), new FnValue {div});
 
     std::string input;
 
