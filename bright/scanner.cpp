@@ -17,7 +17,7 @@ Value *read_form(Reader &reader){ //garbage collection?
         else if ( isdigit(token.value().lexeme.at(1))){
           return read_int(reader);
         }else{
-          return read_atom(reader);
+          return read_atom(reader);//not exactly.. e.g., -A -$
         }
       }
       case '0':

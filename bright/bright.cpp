@@ -36,7 +36,7 @@ Value *READ (std::string input) {
 Value *eval_ast(Value *ast, Env &env);
 
 Value *EVAL(Value *ast, Env &env) { //eg (+ 2 3)
-
+    Value vals();
     if(ast->type() != Value::Type::List){ // + 2 3
         return eval_ast(ast, env);
     }
@@ -45,14 +45,24 @@ Value *EVAL(Value *ast, Env &env) { //eg (+ 2 3)
     }
     else{
         auto list = eval_ast(ast,env)->as_list(); // add fun, 2, 3
-        auto fn = list->at(0)->as_fn()->to_fn();//issues here
+        try {
+            
+            if(list->at(0)->type() != Value::Type::Fn){//issues here
+                throw new ExceptionValue{list->inspect() + " doesnt start with function"};
+            }
+            else{
+                auto fn = list->at(0)->as_fn()->to_fn();
+                Value *args[list->size()-1]; // make array w/0 function spot
+                for (size_t i =1; i< list->size(); ++i){
+                    args[i-1] = list->at(i);
+                }
+                return fn(list->size() - 1,args);
+            }
 
-        Value *args[list->size()-1]; // make array w/0 function spot
-        for (size_t i =1; i< list->size(); ++i){
-            args[i-1] = list->at(i);
+        }catch(ExceptionValue* exception){
+            std::cerr << exception->message() << std::endl;
         }
-        return fn(list->size() - 1,args);
-    }
+    }return ast;
 }
 
 // takes in ast and env, switches on type of env
@@ -64,8 +74,9 @@ Value *eval_ast(Value *ast, Env &env){
             auto search = env.find(ast->as_symbol());
             std::cout<< "symbol: " << ast->inspect() << endl;
             if (search == env.end()){
-                std::cerr <<"error, "<< ast->as_symbol()->str() << " not found\n";
-                return new SymbolValue { "nil"};
+                throw new ExceptionValue{ast->as_symbol()->str() + " not found"};
+                // std::cerr <<"error, "<< ast->as_symbol()->str() << " not found\n";
+                // return new SymbolValue { "nil"};
             }
             return search->second; // believe tthis returns functions defiend in env for symbols
         }
@@ -87,9 +98,18 @@ Value *eval_ast(Value *ast, Env &env){
 std::string PRINT(Value *input) { return pr_str(input);}
 
 std::string rep(std::string input, Env &env){
-    auto ast = READ(input); //vector of vectors / strings
-    auto result = EVAL(ast,env);
-    return PRINT(result); //FIXME - currently printing input in cout in main
+
+    try {
+        auto ast = READ(input); //vector of vectors / strings
+        // auto temp = PRINT(ast); // record
+        // std::cout<< "TEMP: "<<temp<<'\n';
+        auto result = EVAL(ast,env);
+        return PRINT(result); //FIXME - currently printing input in cout in main
+    } catch(ExceptionValue* exception){
+        std::cerr << exception->message() << std::endl;
+        return "";
+    }
+
 }
 
 //run file function

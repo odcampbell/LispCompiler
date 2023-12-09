@@ -19,6 +19,11 @@ FnValue *Value::as_fn(){
     assert(type() == Type::Fn);
     return static_cast<FnValue*>(this);
 }
+
+ExceptionValue *Value::as_exception(){
+    assert(type() == Type::Exception);
+    return static_cast<ExceptionValue*>(this);
+}
     
 std::string ListValue::inspect() {
     std::string out= "(";
@@ -35,7 +40,7 @@ std::string ListValue::inspect() {
         out.append(")");
     }
     
-    return out;
+    return out; // string of form: (2 , 3 , 4 , 5 , 6 , 7 , 8)
 }
 
 

@@ -7,6 +7,7 @@ class ListValue;
 class SymbolValue;
 class IntValue;
 class FnValue;
+class ExceptionValue;
 
 
 class Value {
@@ -17,6 +18,7 @@ class Value {
         Symbol,
         Integer,
         Fn,
+        Exception,
     };
 
     virtual std::string inspect() { assert(0);}
@@ -26,6 +28,7 @@ class Value {
     IntValue* as_int();
     SymbolValue* as_symbol();
     FnValue* as_fn();
+    ExceptionValue *as_exception();
 };
 
 class ListValue : public Value{
@@ -113,4 +116,21 @@ class FnValue : public Value{
 
     private: 
     FnPtr m_fn {nullptr};
+};
+
+class ExceptionValue : public Value{
+    public:
+    ExceptionValue(std::string message)
+        : m_message { message } {}
+
+    const std::string &message() { return m_message;}
+
+    virtual std::string inspect() { 
+        return "<exception " + m_message + ">";
+    } //for printing
+
+    virtual Type type() { return Type::Exception;}
+
+    private: 
+    std::string m_message;
 };
