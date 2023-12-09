@@ -7,7 +7,19 @@ std::unordered_map<std::string, Function> build_namespace(){
     ns["+"] = add;
     ns["-"] = subtract;
     ns["*"] = mul;
-    ns["/"] = divide;
+    ns["prn"] = prn;
+    ns["list?"] = list_q;
+    ns["list"] = list;
+    ns["empty?"] = empty_q;
+    ns["count"] = count;
+    ns["="] = eq;
+    ns["<"] = lt;
+    ns["<="] = lte;
+    ns[">"] = gt;
+    ns[">="] = gte;
+    // ns["/"] = lte; car 
+    // ns["/"] = lte; cdr
+    // ns["/"] = lte; cons
 
     return ns;
 }
@@ -109,16 +121,62 @@ Value *eq(size_t argc, Value**args){
     return new FalseValue;
 }
 
-// Value *lt(size_t argc, Value**args){}
+Value *lt(size_t argc, Value**args){
+    assert(argc >=2);
+    auto a = args[0];
+    auto b = args[1];
+    assert(a->is_integer());
+    assert(b->is_integer());
 
-// Value *gt(size_t argc, Value**args){}
+    if( a->as_int()->to_long() < b->as_int()->to_long())
+        return new TrueValue;
+    return new FalseValue;
+}
 
-// Value *lte(size_t argc, Value**args){}
+Value *gt(size_t argc, Value**args){
+    assert(argc >=2);
+    auto a = args[0];
+    auto b = args[1];
+    assert(a->is_integer());
+    assert(b->is_integer());
 
-// Value *gte(size_t argc, Value**args){}
+    if( a->as_int()->to_long() > b->as_int()->to_long())
+        return new TrueValue;
+    return new FalseValue;
+}
 
-// Value *car(size_t argc, Value**args){}
+Value *lte(size_t argc, Value**args){
+    assert(argc >=2);
+    auto a = args[0];
+    auto b = args[1];
+    assert(a->is_integer());
+    assert(b->is_integer());
 
-// Value *cdr(size_t argc, Value**args){}
+    if( a->as_int()->to_long() <= b->as_int()->to_long())
+        return new TrueValue;
+    return new FalseValue;
+}
 
-// Value *cons(size_t argc, Value**args){}
+Value *gte(size_t argc, Value**args){
+    assert(argc >=2);
+    auto a = args[0];
+    auto b = args[1];
+    assert(a->is_integer());
+    assert(b->is_integer());
+
+    if( a->as_int()->to_long() >= b->as_int()->to_long())
+        return new TrueValue;
+    return new FalseValue;
+}
+
+// Value *car(size_t argc, Value**args){
+
+// }
+
+// Value *cdr(size_t argc, Value**args){
+
+// }
+
+// Value *cons(size_t argc, Value**args){
+
+// }

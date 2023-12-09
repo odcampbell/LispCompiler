@@ -158,10 +158,6 @@ std::string rep(std::string input, Env &env){
 //run file function
 // add functionality to main to check args for a file
 // eval and print for interactive only? 2
-
-//add in error functionality?
-//FIXME: only recognizing these functions, why is it erroring tho?
-
 int main(){
 
     auto env = new Env {nullptr}; //top level
@@ -170,7 +166,7 @@ int main(){
     for (auto pair : ns)
         env->set(new SymbolValue(pair.first), new FnValue {pair.second});
         //end for
-        
+
     std::string input;
 
     for(;;) { // infinite loop

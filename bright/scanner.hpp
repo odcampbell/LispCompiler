@@ -136,7 +136,7 @@ private:
     add that token to the scanner's Token vector
     */
     void identifier(){//update here for def! let* nil?
-        while (isalpha(peek()) || isdigit(peek())) advance();
+        while (isalpha(peek()) || isdigit(peek()) || peek()=='?') advance();
 
         string text = source.substr(start, ( current - start));
 

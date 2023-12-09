@@ -22,3 +22,30 @@
 
 (let (p (+ 2 3) q (+ 2 p)) (+ p q)) 
 #12
+
+( (fn (f x ) (f x)) (fn (a) (+ 1 a)) 7)
+#8
+
+( ( ( fn (a) (fn (b) (+ a b))) 5) 7)
+#12
+
+(def genplus5 (fn () (fn (b) (+ 5 b))))
+
+(def plus5 (genplus5))
+
+(plus5 7)
+#12 ...<fn placcehodler>
+
+(def here? (fn (a) a))
+(here? 10)
+
+(def times10 (fn (a) (* 10 a)))
+
+(times10 8)
+#80 ..need multiline
+
+(def fib (fn (N) (if (= N 0) 1 (if (= N 1) 1 (+ (fib (- N 1)) (fib (- N 2)))))))
+(fib 1)
+(fib 2)
+(fib 4)
+# 1 2 5

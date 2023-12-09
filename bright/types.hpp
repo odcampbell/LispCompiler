@@ -34,6 +34,7 @@ class Value {
     virtual bool is_truthy() {return true;}
     virtual bool is_list() {return false;}
     virtual bool is_listy() {return false;}
+    virtual bool is_integer() {return false;}
     virtual bool operator==( Value *) const {return false;}
     // virtual bool is_listy() {return false;}
 
@@ -114,7 +115,15 @@ class IntValue : public Value {
         return std::to_string(m_long); //may be able to use these for car/cdr/cons functions
     } //for printing
 
+    virtual bool is_integer() override{
+        return true;
+    }
+
+    //cont Val?
     virtual Type type() const override{ return Type::Integer;}
+    bool operator==( Value *other) const override  {
+        return other->as_int() && const_cast<Value*>(other)->as_int()->m_long == m_long;
+    } 
     //inspect
     
     private: 
