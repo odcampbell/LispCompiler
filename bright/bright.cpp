@@ -22,7 +22,7 @@ Value *READ (std::string input) {
 Value *eval_ast(Value *ast, Env &env);
 
 Value *EVAL(Value *ast, Env &env) { //eg (+ 2 3)
-    if(ast->type() != Value::Type::List){ // + 2 3
+    if(ast->type() != Value::Type::List){ // + 2 3 
         return eval_ast(ast, env);
     }
     else if(ast->as_list()->is_empty()){
@@ -34,7 +34,7 @@ Value *EVAL(Value *ast, Env &env) { //eg (+ 2 3)
         auto list = ast->as_list();
         auto first = list->at(0);
 
-        if(first->is_symbol()){
+        if(first->is_symbol()){ //(abc 1 2 3)
             auto special = first->as_symbol();
             if(special->matches("def")){
                 auto key = list->at(1)->as_symbol();
@@ -97,7 +97,7 @@ Value *EVAL(Value *ast, Env &env) { //eg (+ 2 3)
         try{
             auto eval_list = eval_ast(ast,env)->as_list(); // add fun, 2, 3
             if(eval_list->at(0)->type() != Value::Type::Fn){
-                throw new ExceptionValue{eval_list->inspect() + " doesnt start with function"};
+                return ast;// throw new ExceptionValue{eval_list->inspect() + " doesnt start with function"};
             }
             else{ ////////old
                 

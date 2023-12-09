@@ -32,10 +32,15 @@ class Value {
     virtual Type type() const = 0;
     virtual bool is_symbol() {return false;}
     virtual bool is_truthy() {return true;}
+    virtual bool is_true() const {return false;}
+    virtual bool is_false() const {return false;}
+    virtual bool is_nil() const {return false;}
     virtual bool is_list() {return false;}
     virtual bool is_listy() {return false;}
     virtual bool is_integer() {return false;}
     virtual bool operator==( Value *) const {return false;}
+
+    // bool operator!=( Value *other) const {return !(*this == other);}
     // virtual bool is_listy() {return false;}
 
     ListValue* as_list();
@@ -97,6 +102,9 @@ class SymbolValue : public Value{
     virtual Type type() const override { return Type::Symbol;}
     bool matches(const char *str) const{ return m_str == str;}
     virtual bool is_symbol() override {return true;}
+    bool operator==( Value *other) const override  {
+        return other->is_symbol() && const_cast<Value*>(other)->as_symbol()->m_str == m_str;
+    } 
 
     private:
     std::string m_str;
@@ -142,7 +150,9 @@ class FnValue : public Value{
     } //for printing
 
     virtual Type type() const override{ return Type::Fn;}
-
+    bool operator==( Value *other) const override  {
+        return other == this;
+    } 
     private: 
     Function m_fn {nullptr};
 };
@@ -166,25 +176,40 @@ class ExceptionValue : public Value{
 
 class TrueValue : public Value{
     public:
-    
+        virtual bool is_true() const override {return true;}
         virtual std::string inspect() override {return "true"; }
         virtual Type type() const override {return Type::True;}
+
+        bool operator==( Value *other) const override  {
+            return other->is_true();
+        } 
+        
 };
 
 class FalseValue : public Value{
     public:
+        virtual bool is_false() const override {return true;}
     
         virtual std::string inspect() override {return "false"; }
         virtual Type type() const override {return Type::False;}
         virtual bool is_truthy() {return false;}
 
+           bool operator==( Value *other) const override  {
+            return other->is_false();
+        } 
+
 };
 
 class NilValue : public Value{
     public:
-    
+        virtual bool is_nil() const override {return true;}
+
         virtual std::string inspect() override {return "nil"; }
         virtual Type type() const override {return Type::Nil;}
         virtual bool is_truthy() override {return false;}
+
+        bool operator==( Value *other) const override  {
+            return other->is_nil();
+        } 
 
 };
