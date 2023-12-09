@@ -24,6 +24,21 @@ ExceptionValue *Value::as_exception(){
     assert(type() == Type::Exception);
     return static_cast<ExceptionValue*>(this);
 }
+
+TrueValue *Value::as_true(){
+    assert(type() == Type::True);
+    return static_cast<TrueValue*>(this);
+}
+
+FalseValue *Value::as_false(){
+    assert(type() == Type::False);
+    return static_cast<FalseValue*>(this);
+}
+
+NilValue *Value::as_nil(){
+    assert(type() == Type::Nil);
+    return static_cast<NilValue*>(this);
+}
     
 std::string ListValue::inspect() {
     std::string out= "(";

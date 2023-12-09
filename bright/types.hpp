@@ -8,6 +8,9 @@ class SymbolValue;
 class IntValue;
 class FnValue;
 class ExceptionValue;
+class TrueValue;
+class FalseValue;
+class NilValue;
 
 
 class Value {
@@ -19,6 +22,9 @@ class Value {
         Integer,
         Fn,
         Exception,
+        False,
+        True,
+        Nil,
     };
 
     virtual std::string inspect() = 0;
@@ -30,6 +36,9 @@ class Value {
     SymbolValue* as_symbol();
     FnValue* as_fn();
     ExceptionValue *as_exception();
+    TrueValue *as_true();
+    FalseValue *as_false();
+    NilValue *as_nil();
 };
 
 class ListValue : public Value{
@@ -135,4 +144,25 @@ class ExceptionValue : public Value{
 
     private: 
     std::string m_message;
+};
+
+class TrueValue : public Value{
+    public:
+    
+        virtual std::string inspect() override {return "true"; }
+        virtual Type type() override {return Type::True;}
+};
+
+class FalseValue : public Value{
+    public:
+    
+        virtual std::string inspect() override {return "false"; }
+        virtual Type type() override {return Type::False;}
+};
+
+class NilValue : public Value{
+    public:
+    
+        virtual std::string inspect() override {return "nil"; }
+        virtual Type type() override {return Type::Nil;}
 };

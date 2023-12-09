@@ -33,6 +33,18 @@ Value *read_form(Reader &reader){ //garbage collection?
         return read_int(reader);
       //   case '\'':
       default:
+        if(token.value().lexeme == "true"){
+          reader.next();
+          return new TrueValue {};
+        }
+        else if (token.value().lexeme == "false"){
+          reader.next();
+          return new FalseValue {};
+        }
+        else if (token.value().lexeme == "nil"){
+          reader.next();
+          return new NilValue {};
+        }
         return read_atom(reader);
     }
     // switch make a list val type class?
