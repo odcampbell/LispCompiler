@@ -32,42 +32,46 @@ Value *EVAL(Value *ast, Env &env) { //eg (+ 2 3)
     //Ensure function is being called or something else? e.g., try sumn else first?
         auto list = ast->as_list();
         auto first = list->at(0);
-        if(first->is_symbol() && first->as_symbol()->matches("def")){
-            auto key = list->at(1)->as_symbol();
-            auto val = EVAL(list->at(2),env);
-            env.set(key,val);
-            return val;
-        }
-        else if(first->is_symbol() && first->as_symbol()->matches("let")){ //exception, (let (a 9 b 10) a) = 9
-            auto new_env = new Env {&env};
-            auto bindings = list->at(1)->as_list();
-            for(size_t i = 0; i <bindings->size(); i+=2){
-                auto key = bindings->at(i)->as_symbol();
-                assert(i+1 < bindings->size());
-                auto val = EVAL(bindings->at(i+1), *new_env);
-                new_env->set(key,val);
+
+        if(first->is_symbol()){
+            auto special = first->as_symbol();
+            if(special->matches("def")){
+                auto key = list->at(1)->as_symbol();
+                auto val = EVAL(list->at(2),env);
+                env.set(key,val);
+                return val;
             }
-            return EVAL(list->at(2), *new_env);
-        }
-        else{
-            try{
-                auto list = eval_ast(ast,env)->as_list(); // add fun, 2, 3
-                if(list->at(0)->type() != Value::Type::Fn){
-                    throw new ExceptionValue{list->inspect() + " doesnt start with function"};
+            else if(special->matches("let")){ //exception, (let (a 9 b 10) a) = 9
+                auto new_env = new Env {&env};
+                auto bindings = list->at(1)->as_list();
+                for(size_t i = 0; i <bindings->size(); i+=2){
+                    auto key = bindings->at(i)->as_symbol();
+                    assert(i+1 < bindings->size());
+                    auto val = EVAL(bindings->at(i+1), *new_env);
+                    new_env->set(key,val);
                 }
-                else{ ////////old
-                    
-                    auto fn = list->at(0)->as_fn()->to_fn();
-                    Value *args[list->size()-1]; // make array w/0 function spot
-                    for (size_t i =1; i< list->size(); ++i){
-                        args[i-1] = list->at(i);
-                    }
-                    return fn(list->size() - 1,args);
-                }
-            }catch(ExceptionValue* exception){
-                std::cerr << exception->message() << std::endl;
-            }return ast;
+                return EVAL(list->at(2), *new_env);
+            }
         }
+
+        try{
+            auto eval_list = eval_ast(ast,env)->as_list(); // add fun, 2, 3
+            if(eval_list->at(0)->type() != Value::Type::Fn){
+                throw new ExceptionValue{eval_list->inspect() + " doesnt start with function"};
+            }
+            else{ ////////old
+                
+                auto fn = eval_list->at(0)->as_fn()->to_fn();
+                Value *args[eval_list->size()-1]; // make array w/0 function spot
+                for (size_t i =1; i< eval_list->size(); ++i){
+                    args[i-1] = eval_list->at(i);
+                }
+                return fn(eval_list->size() - 1,args);
+            }
+        }catch(ExceptionValue* exception){
+            std::cerr << exception->message() << std::endl;
+        }
+        return ast;
     }
 }
 
