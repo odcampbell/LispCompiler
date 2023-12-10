@@ -16,7 +16,7 @@ https://craftinginterpreters.com/scanning.html
     2. **DOWNLOAD:**
         1. You can download the code with the zip file "bright.zip"
         2. Unzip the code in a directory of your choosing, or unzip it and
-         - copy/drag the files into the directory via file system or even some coding ide's
+            - copy/drag the files into the directory via file system or even some coding ide's
 
 2. ### BUILD: (For Testing: see Step 4)
     1. move into the directory **"LispInterpreter"** and then **"bright"**
@@ -39,7 +39,7 @@ https://craftinginterpreters.com/scanning.html
             - run cmd **"bright"** or **"bright.exe"**
             - you can type cmds in one line continously e.g. (+ 10 (car (cdr (10 90 40)))) to output 100
 
-    2. **To File**
+    2. **To File:**
         - To send results to a file, just add the extraction operator **">>"** and a file name for your output
         - e.g., **bright yispTest.lisp >> output.txt**
         - this works best for output from a file to a file
@@ -58,20 +58,27 @@ https://craftinginterpreters.com/scanning.html
         - then it will run test.py on the results and output this to **testResults.txt**
 
     2. Linux:
-    - run script **linux_test.sh**
-    - it does the same thing
+        - run script **linux_test.sh**
+        - it does the same thing
 
     3. If a test passed, it is labeled True and if not, then False
 
 5. ### Syntax and Stuff
-    1. Not Implemented: (Things you can't do/use in my yisp)
+    1. **Not Implemented: (Things you can't do/use in my yisp)**
         - strings
         - data structures (e.g., vector, map)
         - modulo
-        - optimized recursion (has non optimized recursion just be frugal)
         - cond
-    2. 
-    3. Files for premade functions: core.cpp
+        - handling commas
+
+    2. **Implemented:**
+        - +, -, *, /, list?, empty?, count?, >, =>, <, <=, not?, car, cdr, cons
+        - recursion (non optimized so be frugal)
+        - user defined functions
+    
+    3. Built in Function Syntax:  (name arg arg)
+    4. User defined function SYntax: (def name (fn (arguments) body))
+    5. Files for premade functions: core.cpp
 
 # Notes:
 I started off this project using the book's scanner for parsing but didn't want to try automating classes in C, so I found a tutorial to follow from there. My code differs from the tutorial in 
