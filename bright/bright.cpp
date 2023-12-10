@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <vector>
 #include <unordered_map>
 #include "scanner.hpp"
@@ -8,15 +9,16 @@
 #include "env.hpp"
 #include "core.hpp"
 
-Value *READ (std::string input) {
+std::vector<Token> READ (std::string input) {
 
     // Sep string into tokens put into vector
     Scanner scanner(input);
     std::vector<Token> curr_tokens = scanner.scanTokens();
-    
-    // Start creating meaningful lists/list of lists/symbols from the tokens
-    Reader reader(curr_tokens);
-    return read_form(reader); //which returns read form..
+
+    // for(auto t : curr_tokens){
+    //     std::cout << "Token is: " << t.lexeme << endl;
+    // }
+    return curr_tokens;
 }
 
 Value *eval_ast(Value *ast, Env &env);
@@ -110,7 +112,7 @@ Value *EVAL(Value *ast, Env &env) { //eg (+ 2 3)
             }
         }catch(ExceptionValue* exception){
             std::cerr << exception->message() << std::endl;
-        }
+        } 
         return ast;
     }
 }
@@ -140,25 +142,60 @@ Value *eval_ast(Value *ast, Env &env){
 
 std::string PRINT(Value *input) { return pr_str(input);}
 
-std::string rep(std::string input, Env &env){
+std::string rep(std::string input, Env &env, bool fileRead = false){
 
     try {
-        auto ast = READ(input); //vector of vectors / strings
-        // auto temp = PRINT(ast); // record
-        // std::cout<< "TEMP: "<<temp<<'\n';
-        auto result = EVAL(ast,env);
-        return PRINT(result); //FIXME - currently printing input in cout in main
+        auto tokens = READ(input);//vector
+
+        if(fileRead){
+            Reader reader(tokens);
+            auto tokenCount = reader.getLen(); //#tokens
+            auto currIndex = reader.getIndexLen();//0
+            std::cout<< "#Tokens: "<<tokenCount<<" Curr: "<<currIndex<<'\n';
+
+            while(currIndex < tokenCount){
+                auto ast = read_form(reader);
+                auto temp = PRINT(ast); // record
+                // std::cout<< "TEMP: "<<temp<<'\n';
+                auto result = EVAL(ast,env);
+                std::cout<<"RESULT> "<< PRINT(result) <<endl;
+                currIndex = reader.getIndexLen();
+            }
+            return "";
+        }
+        else{
+            Reader reader(tokens);
+            auto ast = read_form(reader);
+            auto temp = PRINT(ast);
+            auto result = EVAL(ast,env);
+            return PRINT(result);
+        }
+        
     } catch(ExceptionValue* exception){
         std::cerr << exception->message() << std::endl;
         return "";
     }
 
 }
+void runFile(std::string yispFile, Env &env){
+    std::ifstream file(yispFile);
+    std::string str;
+    std::string file_contents;
+
+    while (std::getline(file, str))
+    {
+        file_contents += str;
+        file_contents.push_back('\n');
+        // std::cout << file_contents;
+    }
+    
+    rep(file_contents, env, true);
+}
 
 //run file function
 // add functionality to main to check args for a file
 // eval and print for interactive only? 2
-int main(){
+int main(int argc, char **argv){
 
     auto env = new Env {nullptr}; //top level
     auto ns = build_namespace();
@@ -169,14 +206,23 @@ int main(){
 
     std::string input;
 
-    for(;;) { // infinite loop
-        std::cout << "user> ";
+    if(argc >2){
+        std::cout<<"Using: Too many files> "<< argv[2];
+    }
+    else if(argc >1){
+        runFile(argv[1], *env); // env and ns too?
+    }
+    else{
+        for(;;) { // infinite loop
+            std::cout << "user> ";
 
-        if(!std:: getline(std::cin, input)){
-            break;
-        }
-           
-        std::cout << rep(input, *env) << std::endl;
-    }  
+            if(!std:: getline(std::cin, input)){
+                break;
+            }
+            
+            std::cout << rep(input, *env) << std::endl;
+        }  
+    }
+    
     return 0;
 }

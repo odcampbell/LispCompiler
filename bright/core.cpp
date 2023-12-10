@@ -8,6 +8,7 @@ std::unordered_map<std::string, Function> build_namespace(){
     ns["+"] = add;
     ns["-"] = subtract;
     ns["*"] = mul;
+    ns["/"] = divide;
     ns["prn"] = prn;
     ns["list?"] = list_q;
     ns["list"] = list;
@@ -179,12 +180,20 @@ Value *not_fun(size_t argc, Value**args){
 }
 
 Value *car(size_t argc, Value**args){
-    assert(argc >=1);
-    if(args[0]->is_list()){
-        return args[0]->as_list()->at(0);
+    try{
+        if(argc != 1) 
+            throw new ExceptionValue{" car only accepts 1 element"};
+
+        if(args[0]->is_list()){
+            return args[0]->as_list()->at(0);
+        }
+        else{
+            throw new ExceptionValue{args[0]->inspect() + " car called on non-list"};
+            return args[0];
+        }
     }
-    else{
-        throw new ExceptionValue{args[0]->inspect() + " car called on non-list"};
+    catch(ExceptionValue* exception){
+        std::cerr << exception->message() << std::endl;
         return args[0];
     }
 }
@@ -197,8 +206,6 @@ Value *cdr(size_t argc, Value**args){
             throw new ExceptionValue{" cdr only accepts 1 element"};
 
         if(args[0]->is_list()){
-        //     args[0]->as_list()->pop_front(); //0 n time and destructive sadly
-        //     return args[0];
             auto l = new ListValue {};
             auto len = args[0]->as_list()->size();
             for(size_t i=1; i<len; ++i){
@@ -218,12 +225,19 @@ Value *cdr(size_t argc, Value**args){
 }
 
 Value *cons(size_t argc, Value**args){
-        assert(argc >=1);
-    if(args[0]->is_list()){
-        return args[0]->as_list()->at(0);
+    
+    try{
+            
+        if(argc != 2) 
+            throw new ExceptionValue{" cons only accepts 2 elements"};
+
+        auto l = new ListValue {};
+        l->push(args[0]);
+        l->push(args[1]);
+        return l;
     }
-    else{
-        throw new ExceptionValue{args[0]->inspect() + " car called on non-list"};
+    catch(ExceptionValue* exception){
+        std::cerr << exception->message() << std::endl;
         return args[0];
     }
 }

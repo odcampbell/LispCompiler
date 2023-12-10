@@ -165,11 +165,18 @@ public:
         while (!isAtEnd()) {
             start = current;
             // cout<<endl<<"Before Scan: Start= "<< start << " Curr= " << current<< endl;
-            scanToken();
+            try{
+                scanToken();
+            }
+            catch(ExceptionValue* exception){
+                std::cerr << exception->message() << std::endl;
+                exit(0);
+            }
+            
         }
 
-        Token curr(BEOF, "", NULL, line);
-        tokens.push_back( curr);
+        // Token curr(BEOF, "", NULL, line);
+        // tokens.push_back( curr);
 
         return tokens;
     }
@@ -206,7 +213,9 @@ public:
                     number();
                 }
                 else{
-                    cout << "Unexpected character. Line:"<< line <<" Curr: "<< curr << endl;
+                    throw new ExceptionValue{" Unexpected character. Line:"+ line};
+                    // cout << "Unexpected character. Line:"<< line <<" Curr: "<< curr << endl;
+
                 }
                     
                 break;
@@ -247,7 +256,8 @@ public:
                     identifier();
                 }
                 else {
-                    cout << "Unexpected character. Line:"<< line << endl;
+                    throw new ExceptionValue{" Unexpected character. Line:"+ line};
+                    // cout << "Unexpected character. Line:"<< line << endl;
                 }
                 break;
         }
@@ -278,6 +288,14 @@ class Reader {
             return readerTokens.at(readerIndex);
         }
         return{};
+    }
+
+    size_t getLen(){
+        return readerTokens.size();
+    } 
+    
+    size_t getIndexLen(){
+        return readerIndex;
     }
 
     // optional<Token> peekNext(){ //shows next without consuming

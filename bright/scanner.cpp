@@ -62,6 +62,8 @@ ListValue  *read_list(Reader &reader){ //return value? enum? // change opt str?
     if (token.value().lexeme == ")"){ //end of list
       // auto t = 
       reader.next(); // consume ')'
+      // cout<< "Ending len: "<< reader.getIndexLen() << " Final: "<< reader.getLen() <<endl;
+
       break;
     }
       
