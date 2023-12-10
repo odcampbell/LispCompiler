@@ -9,12 +9,17 @@ std::unordered_map<std::string, Function> build_namespace();
 Value *add(size_t argc, Value**args);
 Value *subtract(size_t argc, Value**args);
 Value *mul(size_t argc, Value**args);
+Value *mod(size_t argc, Value**args);
 Value *divide(size_t argc, Value**args);
 
 Value *prn(size_t argc, Value**args);
 Value *list(size_t argc, Value**args);
 Value *list_q(size_t argc, Value**args);
-Value *empty_q(size_t argc, Value**args);
+Value *nil_q(size_t argc, Value**args);
+Value *num_q(size_t argc, Value**args);
+Value *and_q(size_t argc, Value**args);
+Value *or_q(size_t argc, Value**args);
+Value *symbol_q(size_t argc, Value**args);
 Value *count(size_t argc, Value**args);
 Value *eq(size_t argc, Value**args);
 Value *lt(size_t argc, Value**args);

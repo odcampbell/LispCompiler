@@ -221,6 +221,7 @@ public:
                 break;
                 }
             case '+': addToken(PLUS); break;
+            case '%': addToken(MOD); break;
             case ';': addToken(SEMICOLON); break;
             case '*': addToken(STAR); break; 
             case '/': addToken(SLASH); break; //no comments in my code

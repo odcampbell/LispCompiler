@@ -66,14 +66,17 @@ https://craftinginterpreters.com/scanning.html
 
 5. ### Syntax and Stuff
     1. **Not Implemented: (Things you can't do/use in my yisp)**
-        - strings
+        - strings (prn function to print strings also doesn't work currently)
         - data structures (e.g., vector, map)
-        - modulo
         - cond
         - handling commas
+        - decimals (might not crash but you get unexpected behavior)
+        - case sensitivy (keywords have to match implementation -> core.cpp)
 
     2. **Implemented:**
-        - +, -, *, /, list?, empty?, count?, >, =>, <, <=, not?, car, cdr, cons
+        - +, -, *, /, list?, nil?, count?, not? >, =>, <, <=, car, cdr, cons, if,
+        - and?, or?, list
+        - symbol? (only if actually set, e.g. via (def a (fn (b)b) )) (symbol? a) true
         - recursion (non optimized so be frugal)
         - user defined functions
     
