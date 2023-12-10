@@ -11,7 +11,7 @@ https://craftinginterpreters.com/scanning.html
         1. open a terminal on your device
         2. navigate to desired directory and run following command
         3. git clone https://github.com/odcampbell/LispCompiler.git
-            - if it does not allow you to clone then you follow **step 2** 
+            - if it does not allow you to clone then you follow **DOWNLOAD** 
         
     2. **DOWNLOAD:**
         1. You can download the code with the zip file "bright.zip"
@@ -52,13 +52,14 @@ https://craftinginterpreters.com/scanning.html
     I wrote a simple script to streamline testing.
     I believe these can run different on different systems so I wrote one for windows and one for linux
 
-    1. Windows:
+    1. Windows Terminal:
         - run script **windows_test.bat**
         - it will call make, run test file, and output the results to **yispResults.txt**
         - then it will run test.py on the results and output this to **testResults.txt**
+        - you can also run the bash script here via: **bash linux_test.sh**
 
     2. Linux:
-        - run script **linux_test.sh**
+        - run script **./linux_test.sh**
         - it does the same thing
 
     3. If a test passed, it is labeled True and if not, then False
@@ -77,7 +78,7 @@ https://craftinginterpreters.com/scanning.html
         - user defined functions
     
     3. Built in Function Syntax:  (name arg arg)
-    4. User defined function SYntax: (def name (fn (arguments) body))
+    4. User defined function Syntax: (def name (fn (arguments) body))
     5. Files for premade functions: core.cpp
 
 # Notes:
