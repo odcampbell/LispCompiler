@@ -4,4 +4,4 @@ bright: bright.cpp scanner.cpp printer.cpp types.cpp core.cpp
 	$(CXX) $(CXXFLAGS)  -o $@ $^
 
 clean:
-	rm *.o *.exe
+	rm  *.exe #*.o

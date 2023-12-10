@@ -53,7 +53,7 @@ Value *EVAL(Value *ast, Env &env) { //eg (+ 2 3)
                     auto val = EVAL(bindings->at(i+1), *new_env);
                     new_env->set(key,val);
                 }
-                return EVAL(list->at(2), *new_env);
+                return EVAL(list->at(2), *new_env);// replace with ast = list->at(2); //?
             }
             else if(special->matches("do")){
                 Value *result = nullptr;
