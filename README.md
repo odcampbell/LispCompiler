@@ -28,16 +28,16 @@ https://craftinginterpreters.com/scanning.html
 
 3. ### RUN: (For Syntax and Stuff see Step 5)
     1. **To terminal:**
-        **From File**
-        - run cmd **"bright fileName.txt"** or **"bright.exe fileName.txt"**
-        - this will run the cmds in the file and exit when done
-        - fileName.txt is just a placeholder for whatever file is holding your code
-        - **Try** with this cmd: **"bright yispTest.lisp"** to use my demo file
-        - Answers are located in **"demoAnswerKey.txt"**
+        1. **From File**
+            - run cmd **"bright fileName.txt"** or **"bright.exe fileName.txt"**
+            - this will run the cmds in the file and exit when done
+            - fileName.txt is just a placeholder for whatever file is holding your code
+            - **Try** with this cmd: **"bright yispTest.lisp"** to use my demo file
+            - Answers are located in **"demoAnswerKey.txt"**
 
-    **Interactive:**
-        - run cmd **"bright"** or **"bright.exe"**
-        - you can type cmds in one line continously e.g. (+ 10 (car (cdr (10 90 40)))) to output 100
+        2. **Interactive:**
+            - run cmd **"bright"** or **"bright.exe"**
+            - you can type cmds in one line continously e.g. (+ 10 (car (cdr (10 90 40)))) to output 100
 
     2. **To File**
         - To send results to a file, just add the extraction operator **">>"** and a file name for your output
