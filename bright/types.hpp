@@ -73,6 +73,7 @@ class ListValue : public Value{
     bool is_empty() {return m_list.size() == 0;}
     size_t size() const { return m_list.size(); }
     Value* at(size_t index) const{ return m_list.at(index); }
+    void pop_front() { m_list.erase(m_list.begin()); }
 
     private:
     std::vector<Value *> m_list {};
