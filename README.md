@@ -65,6 +65,7 @@ https://craftinginterpreters.com/scanning.html
         - The windows one still works, and the cmds in each file can be run individually
 
     3. If a test passed, it is labeled True and if not, then False
+    4. Because I did not implement comments/strings in my lisp, it is difficult to clearly show which test corresponds with which test result. However, they are generally one to one from **yispResults.txt** to **testResults.txt** , excluding **<fn placeholder>**
 
 5. ### Syntax and Stuff
     1. **Not Implemented: (Things you can't do/use in my yisp)**
@@ -86,6 +87,10 @@ https://craftinginterpreters.com/scanning.html
     4. User defined function Syntax: (def name (fn (arguments) body))
         -must included (fn ) after name
     5. Files for premade functions: core.cpp
+
+6. ### TEST RESULTS:
+    1. I've included the expected test results in **testResults.txt**
+    2. When you run the test mention in step 4, this output is what should be displayed to the screen/terminal
 
 # Notes:
 I started off this project using the book's scanner for parsing but didn't want to try automating classes in C, so I found a tutorial to follow from there. My code differs from the tutorial in 

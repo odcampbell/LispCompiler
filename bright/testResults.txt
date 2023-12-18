@@ -1,10 +1,9 @@
-['<fn placeholder>', '100', '6', '20', '<fn placeholder>', '<fn placeholder>', '12', '<fn placeholder>', '1', '2', '5', '(5 (6 (7 8)))', '<fn placeholder>', '100', '6', '20', '<fn placeholder>', '<fn placeholder>', '12', '<fn placeholder>', '1', '2', '5', '(5 (6 (7 8)))']
-[32mPASS  =   100[0m
-[32mPASS  =   6[0m
-[32mPASS  =   20[0m
-[32mPASS  =   12[0m
-[32mPASS  =   1[0m
-[32mPASS  =   2[0m
-[32mPASS  =   5[0m
-[32mPASS  =   (5 (6 (7 8)))[0m
-[32mALL TESTS PASSED[0m
+PASS  =   100
+PASS  =   6
+PASS  =   20
+PASS  =   12
+PASS  =   1
+PASS  =   2
+PASS  =   5
+PASS  =   (5 (6 (7 8)))
+ALL TESTS PASSED
