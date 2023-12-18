@@ -151,14 +151,14 @@ std::string rep(std::string input, Env &env, bool fileRead = false){
             Reader reader(tokens);
             auto tokenCount = reader.getLen(); //#tokens
             auto currIndex = reader.getIndexLen();//0
-            std::cout<< "#Tokens: "<<tokenCount<<" Curr: "<<currIndex<<'\n';
+            // std::cout<< "#Tokens: "<<tokenCount<<" Curr: "<<currIndex<<'\n';
 
             while(currIndex < tokenCount){
                 auto ast = read_form(reader);
                 auto temp = PRINT(ast); // record
                 // std::cout<< "TEMP: "<<temp<<'\n';
                 auto result = EVAL(ast,env);
-                std::cout<<"RESULT> "<< PRINT(result) <<endl;
+                std::cout<< PRINT(result) <<endl;
                 currIndex = reader.getIndexLen();
             }
             return "";

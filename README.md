@@ -55,12 +55,14 @@ https://craftinginterpreters.com/scanning.html
     1. Windows Terminal:
         - run script **windows_test.bat**
         - it will call make, run test file, and output the results to **yispResults.txt**
-        - then it will run test.py on the results and output this to **testResults.txt**
+        - then it will run test.py on the results and output this to the terminal because color coding doesn't transfer to files
         - you can also run the bash script here via: **bash linux_test.sh**
 
     2. Linux:
         - run script **./linux_test.sh**
         - it does the same thing
+        - Update: currently it isn't working for me but I'm not sure why?
+        - The windows one still works, and the cmds in each file can be run individually
 
     3. If a test passed, it is labeled True and if not, then False
 
@@ -82,6 +84,7 @@ https://craftinginterpreters.com/scanning.html
     
     3. Built in Function Syntax:  (name arg arg)
     4. User defined function Syntax: (def name (fn (arguments) body))
+        -must included (fn ) after name
     5. Files for premade functions: core.cpp
 
 # Notes:

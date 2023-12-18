@@ -9,7 +9,7 @@
 
 (let (z (+ 2 3)) (+1 z))
 
-(let (p (+ 2 3) q (+ 2 p)) (+ p q)) 
+(let (p (+ 2 7) q (+ 2 p)) (+ p q)) 
 
 (def genplus5 (fn () (fn (b) (+ 5 b))))
 
@@ -23,3 +23,5 @@
 (fib 4)
 
 (cons 5 (cons 6 ( cons 7 8) ) )
+
+
