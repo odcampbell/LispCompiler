@@ -10,3 +10,12 @@
 2
 5
 (5 (6 (7 8)))
+<fn placeholder>
+<fn placeholder>
+<fn placeholder>
+<fn placeholder>
+<fn placeholder>
+11
+21
+13
+16

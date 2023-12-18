@@ -25,3 +25,50 @@
 (cons 5 (cons 6 ( cons 7 8) ) )
 
 
+(def updateScore (fn (score oneCount)
+  (if (> oneCount 0) 
+    (if (> score 21)
+      (updateScore (- score 10) (- oneCount 1))
+      score)
+    score)
+))
+
+(def nextCard (fn (hand)
+    (car hand)
+))
+
+
+(def twoOr10? (fn (card)
+    (if (> card 1)
+      (if (< card 11 ) true false)
+      false)
+))
+
+(def calcHand (fn (hand score oneCount)
+
+    (if (nil? hand)
+      (if (> score 21)
+        (updateScore score oneCount) 
+        score)
+
+      (if (= 1 (nextCard hand))
+        (calcHand (cdr hand) (+ score 11) (+ 1 oneCount))
+
+        (if (twoOr10? (nextCard hand))
+          (calcHand (cdr hand) (+ score (nextCard hand)) oneCount)
+
+          (calcHand (cdr hand) (+ score 10) oneCount)))
+    )
+  ))
+
+
+(def blackjack (fn (hand)
+  (calcHand hand 0 0)
+))
+
+(blackjack (1))
+(blackjack (1 11))
+(blackjack (1 1 1 13))
+(blackjack (10 5 1))
+
+

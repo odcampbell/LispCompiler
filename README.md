@@ -51,21 +51,23 @@ https://craftinginterpreters.com/scanning.html
 4. ### TEST:
     I wrote a simple script to streamline testing.
     I believe these can run different on different systems so I wrote one for windows and one for linux
+    You may have to modify the first line in linux depending on where your bash is located.
 
     1. Windows Terminal:
         - run script **windows_test.bat**
         - it will call make, run test file, and output the results to **yispResults.txt**
-        - then it will run test.py on the results and output this to the terminal because color coding doesn't transfer to files
+        - then it will run **test.py** on the results and output this to the terminal because color coding doesn't transfer to files
         - you can also run the bash script here via: **bash linux_test.sh**
 
-    2. Linux:
+    2. Linux: (this script doesn't seem as consistent as the previous one)
         - run script **./linux_test.sh**
         - it does the same thing
         - Update: currently it isn't working for me but I'm not sure why?
-        - The windows one still works, and the cmds in each file can be run individually
+        - The windows one still works, and the cmds in each file can be run individually if neither do
 
     3. If a test passed, it is labeled True and if not, then False
     4. Because I did not implement comments/strings in my lisp, it is difficult to clearly show which test corresponds with which test result. However, they are generally one to one from **yispResults.txt** to **testResults.txt** , excluding **<fn placeholder>**
+    5. If the scripts cause trouble with encoding, 
 
 5. ### Syntax and Stuff
     1. **Not Implemented: (Things you can't do/use in my yisp)**
@@ -90,7 +92,8 @@ https://craftinginterpreters.com/scanning.html
 
 6. ### TEST RESULTS:
     1. I've included the expected test results in **testResults.txt**
-    2. When you run the test mention in step 4, this output is what should be displayed to the screen/terminal
+    2. When you run the test mention in step 4, this output is what should be displayed to the screen/terminal'
+    3. Inlcuded in **yispTest** is a subpar blackjack implementation that demonstrates the compiler's capabilities
 
 # Notes:
 I started off this project using the book's scanner for parsing but didn't want to try automating classes in C, so I found a tutorial to follow from there. My code differs from the tutorial in 

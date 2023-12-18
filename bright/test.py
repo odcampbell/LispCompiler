@@ -15,7 +15,11 @@ class Tester:
                         "1",
                         "2",
                         "5",
-                        "(5 (6 (7 8)))"]
+                        "(5 (6 (7 8)))",
+                        "11",
+                        "21",
+                        "13",
+                        "16"]
         self.results = []
     
     def find_answer(self):
