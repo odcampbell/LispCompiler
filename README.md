@@ -32,7 +32,7 @@ https://craftinginterpreters.com/scanning.html
             - run cmd **"bright fileName.txt"** or **"bright.exe fileName.txt"**
             - this will run the cmds in the file and exit when done
             - fileName.txt is just a placeholder for whatever file is holding your code
-            - **Try** with this cmd: **"bright yispTest.lisp"** to use my demo file
+            - **Try** with this cmd: **"bright yispTest.txt"** to use my demo file
             - Answers are located in **"demoAnswerKey.txt"**
 
         2. **Interactive:**
